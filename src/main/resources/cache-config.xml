@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:util="http://www.springframework.org/schema/util"
+	xmlns:gfe="http://www.springframework.org/schema/gemfire"
+	xsi:schemaLocation="http://www.springframework.org/schema/gemfire http://www.springframework.org/schema/gemfire/spring-gemfire.xsd
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util.xsd">
+    
+    <gfe:cache properties-ref="gemfire-props"/>
+   
+    <gfe:partitioned-region id="Product" persistent="true">
+         <gfe:cache-listener ref="loggingCacheListener"/>
+         <gfe:cache-loader ref="productDBLoader"/>
+         <gfe:cache-writer ref="productDBWriter"/>
+    </gfe:partitioned-region>  
+    
+    <util:properties id="gemfire-props">
+        <prop key="log-level">warning</prop>
+    </util:properties>
+    
+   <bean id = "productDBLoader" class = "com.dish.main.ProductDBLoader">
+    </bean>
+   <bean id = "productDBWriter" class = "com.dish.main.ProductDBWriter">
+   </bean> 
+   <bean id = "loggingCacheListener" class = "com.dish.util.LoggingCacheListener">
+    </bean>
+
+</beans>
